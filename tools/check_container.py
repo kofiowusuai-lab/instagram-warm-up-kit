@@ -17,7 +17,9 @@ def check():
     while not matches:
         url = 'http://127.0.0.1:50400/api/v1/user/list?page_size=100&page=%d' % page
         with urllib.request.urlopen(url, timeout=5) as r:
-            profiles = json.load(r)['data']['list']
+            payload = json.load(r)
+            assert payload.get('code') == 0, payload.get('msg', 'Profile listing failed')
+            profiles = payload['data']['list']
         matches = [p for p in profiles if p['name'] == os.getenv('PROFILE_NAME', 'Instagram-Clips-01')]
         if len(profiles) < 100: break
         page += 1

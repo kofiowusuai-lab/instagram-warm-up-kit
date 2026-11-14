@@ -9,6 +9,16 @@ seed = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(seed)
 
 class SeedTests(unittest.TestCase):
+    def test_local_mode_initialized_without_overwriting_existing_config(self):
+        with tempfile.TemporaryDirectory() as d:
+            target = Path(d) / 'config.json'
+            seed.initialize_local_config(target)
+            self.assertEqual(json.loads(target.read_text())['mode'], 'local')
+            cloud = {'version':1,'mode':'cloud','cloudUrl':'https://example.com','localAnalytics':False}
+            target.write_text(json.dumps(cloud))
+            seed.initialize_local_config(target)
+            self.assertEqual(json.loads(target.read_text()), cloud)
+
     def test_fresh_install_preloads_modes_with_topic(self):
         with tempfile.TemporaryDirectory() as d:
             target = Path(d) / 'custom-scripts/local.json'

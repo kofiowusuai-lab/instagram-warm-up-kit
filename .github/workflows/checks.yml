@@ -22,3 +22,4 @@ jobs:
         run: |
           docker logs aliasmode-kit-check || true
           docker exec aliasmode-kit-check cat /tmp/aliasmode-error.log || true
+          docker exec aliasmode-kit-check cat /tmp/bootstrap-error.log || true

@@ -16,7 +16,7 @@ Windows: run these commands in WSL2 with Docker Desktop's WSL integration enable
 
 Open **http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=remote**. The first build downloads the desktop libraries and the pinned AliasMode release (several hundred MB). No host AliasMode, Node, Python, browser engine, proxy subscription, or AliasMode Cloud account is required.
 
-1. If prompted, select **Continue locally**. The startup task creates `Instagram-Clips-01` and opens Instagram. If that task timed out during onboarding, run `docker compose exec desktop python3 tools/bootstrap_profile.py`.
+1. Fresh installations are configured in **Local mode** automatically. The startup task creates `Instagram-Clips-01` and opens Instagram. If that task timed out during onboarding, run `docker compose exec desktop python3 tools/bootstrap_profile.py`.
 2. Create your Instagram account or sign in inside that browser. Complete verification yourself.
 3. In AliasMode select the profile → **Run script** → `ig-soft-smoke-test`. Keep parallel browsers at **1** and saved login details **off**. Use `{}` to use your configured topic, or provide:
 

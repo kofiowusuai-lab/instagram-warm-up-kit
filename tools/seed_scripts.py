@@ -11,6 +11,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+def initialize_local_config(target):
+    target = Path(target)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with target.open('x') as stream:
+            json.dump({'version':1, 'mode':'local', 'localAnalytics':False}, stream)
+            stream.write('\n')
+        target.chmod(0o600)
+    except FileExistsError:
+        pass
+
 def seed(target, topic):
     target = Path(target)
     rows = json.loads(target.read_text()) if target.exists() else []
@@ -40,7 +51,9 @@ def seed(target, topic):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--target', type=Path, required=True)
+    parser.add_argument('--initialize-local', type=Path)
     parser.add_argument('--topic', default=os.getenv('TOPIC', 'GTA 6, GTA VI, Grand Theft Auto VI, Rockstar Games'))
     args = parser.parse_args()
+    if args.initialize_local: initialize_local_config(args.initialize_local)
     seed(args.target, args.topic)
     print('Scripts ready; existing copies preserved.')

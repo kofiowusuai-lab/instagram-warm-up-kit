@@ -2,7 +2,7 @@
 
 ## First installation
 
-Use the README quick start. The container stores AliasMode at `/opt/aliasmode`, the kit at `/opt/kit`, and account state under `/data`. Scripts are seeded before AliasMode starts into `/data/com.aliasmode.desktop/custom-scripts/local.json`. Existing copies are never overwritten. Bootstrap uses only the documented loopback status/profile/browser routes; it explicitly creates Firefox rather than the API's Chromium default. It reuses a matching profile name and handles list pagination.
+Use the README quick start. The container stores AliasMode at `/opt/aliasmode`, the kit at `/opt/kit`, and account state under `/data`. Scripts are seeded before AliasMode starts into `/data/com.aliasmode.desktop/custom-scripts/local.json`. Existing copies are never overwritten. Fresh installations also receive a Local-mode config before app startup; existing configs are preserved. Bootstrap uses only the documented loopback status/profile/browser routes; it explicitly creates Firefox rather than the API's Chromium default. It reuses a matching profile name and handles list pagination.
 
 If AliasMode displays welcome/local-mode onboarding, complete it in the desktop. If the initial-profile task timed out, rerun `docker compose exec desktop python3 tools/bootstrap_profile.py`. It never handles Instagram credentials. Check the actual browser window and navigate to Instagram manually if browser launch arguments are ignored by a future platform release.
 
