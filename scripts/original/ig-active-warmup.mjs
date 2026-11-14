@@ -1,20 +1,15 @@
 // ============================================================================
-// SOFT WARM-UP: change the topic below to your niche, then save and import.
+// ACTIVE WARM-UP: change the topic below to your niche, then save and import.
 // Use several related words: the script watches reels that mention any of them
 // and skips the rest, e.g. "fitness, gym, workout, training, protein"
 const TOPIC = "fitness, gym, workout, training, protein";
 // ============================================================================
 
 /**
- * Instagram soft warm-up: passive use only, steered toward your topic.
- *
- * Checks notifications and messages, watches a few stories and scrolls the
- * feed. Then it searches your topic, looks at a few accounts from the
- * results, and watches reels from the topic's own results page (most of the
- * session). After that it moves to the normal Reels feed, watching reels
- * whose caption or hashtags mention your topic and skipping the rest.
- *
- * Never likes, follows, saves, comments or posts.
+ * Instagram active warm-up: user-supplied active plan and original shared engine.
+ * 15-30 reels, 2-6 likes, 1-4 queued profile visits; optional follows, saves,
+ * stories and comment-thread reads. Never posts comments or sends messages.
+ * Reference version without the two navigation fixes; not preloaded.
  */
 
 // ============================================================================
