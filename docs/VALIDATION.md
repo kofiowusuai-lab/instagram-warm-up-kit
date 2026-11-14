@@ -8,6 +8,17 @@ The active plan is supplied and preloaded but has not been validated live. Do no
 
 ## Automated checks
 
-Five Node regression cases cover direct section navigation and hidden-author handling. Six Python cases cover script seeding without overwriting edits/corrupt stores, profile reuse, explicit Firefox creation without credentials, and paginated profile discovery. These use narrow test doubles and do not simulate Instagram end to end.
+Five Node regression cases cover direct section navigation and hidden-author handling. Seven Python cases cover script seeding without overwriting edits/corrupt stores, profile reuse, explicit Firefox creation without credentials, paginated profile discovery, and Local-mode initialization that preserves existing configuration. These use narrow test doubles and do not simulate Instagram end to end.
 
 The container must be built and its desktop/app startup checked independently. A graphical startup test does not establish that login, every Instagram DOM selector, or active actions work on every machine.
+
+## Container acceptance, 2026-11-14
+
+[GitHub Actions run 43549151508](https://github.com/kofiowusuai-lab/instagram-aliasmode-kit/actions/runs/43549151508) passed on x64 Ubuntu at commit `5a2631b`:
+
+- Seven Python tests, five Node regression tests, script syntax checks and Compose validation passed.
+- Docker image built successfully and verified the pinned official AliasMode archive checksum.
+- Fresh container startup served noVNC, returned a successful AliasMode API response, created the initial profile and reported its browser as Active.
+- All three private scripts were present in the script store. No Instagram credentials were entered and no engagement was performed by this CI check.
+
+The same image also built locally on Apple Silicon, but the AliasMode Linux sidecar failed during startup under ARM emulation. Container support is therefore x64; native AliasMode is the Mac/ARM fallback. No claim of a live Linux Instagram warm-up or active engagement test is made.
