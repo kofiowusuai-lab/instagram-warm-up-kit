@@ -12,5 +12,14 @@
   "weekly_review_period_days": 7,
   "default_script": "ig-soft-warmup",
   "active_mode_enabled": false,
-  "scheduler_enabled": false
+  "scheduler_enabled": false,
+  "schedule": {
+    "timezone": "UTC",
+    "times": [
+      "07:00",
+      "21:00"
+    ],
+    "session_minutes": 20,
+    "skip_days_per_week": 1
+  }
 }

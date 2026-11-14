@@ -95,3 +95,7 @@ Maintain one private record directory per account; never combine accounts. Follo
 Code checks: `python3 -m unittest discover -s tests -v`, `node --test tests/*.test.mjs`, script syntax checks and `docker compose config --quiet`. CI checks infrastructure only and must not perform Instagram engagement. Do not describe infrastructure checks as manually completed Instagram activities.
 
 Keep the repository private unless the owner explicitly requests public visibility.
+
+## Scheduled sessions
+
+Use docs/SCHEDULING.md for the fixed-GMT scheduler. It is opt-in per account. The user's configured schedule takes precedence over old preferred windows. Keep per-account claims/skip dates and logs persistent. The native macOS job requires a logged-in, awake machine; do not claim headless execution or wake support. Stop at the duration budget and record incomplete counters as unreported.

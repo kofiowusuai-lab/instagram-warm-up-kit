@@ -26,3 +26,9 @@ The container must be built and its desktop/app startup checked independently. A
 - All three private scripts were present in the script store. No Instagram credentials were entered and no engagement was performed by this CI check.
 
 The same image also built locally on Apple Silicon, but the AliasMode Linux sidecar failed during startup under ARM emulation. Container support is therefore x64; native AliasMode is the Mac/ARM fallback. No claim of a live Linux Instagram warm-up or active engagement test is made.
+
+## Scheduler validation, 2026-11-14
+
+The fixed-GMT scheduling implementation passes 15 Python and 9 Node checks, including persisted skip dates, no duplicate claims, missed slots, pause behavior, immediate warning persistence despite a later API error, budget clipping, and dedicated-tab isolation. A live no-engagement AliasMode runtime probe confirmed node:fs imports and creation/closure of an about:blank tab. The timed source was provisioned and its exact saved source verified.
+
+The owner account's native macOS minute-tick LaunchAgent was installed and its initial no-due-session tick exited 0. Private settings/state are not committed. No full 20-minute scheduled Instagram session has yet completed in this evidence. This scheduler uses the native background browser, not a verified headless mode. Container startup acceptance above predates the scheduler addition; it does not establish unattended engagement correctness.

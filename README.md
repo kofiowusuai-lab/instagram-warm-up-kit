@@ -22,7 +22,7 @@ Open **http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=remote**. The firs
 4. Ask **“Start today's warm-up.”** The agent reads those files, checks warnings, and runs the authorized script mode, recording actual output.
 5. The agent saves the execution log, reports actual counts/outcome, updates progress and warnings, and produces weekly reviews. Report any additional manual activity separately.
 
-**Automated activity is the default workflow.** Soft mode is the tested passive default. Active mode performs likes/follows/saves and requires explicit mode selection or a recorded approved schedule. No recurring scheduler is installed by this repository; a preferred time window alone does not enable one.
+**Automated activity is the default workflow.** Soft mode is the tested passive default. Active mode performs likes/follows/saves and requires explicit mode selection or a recorded approved schedule. An opt-in fixed-GMT scheduler is available; install it per account using [SCHEDULING.md](docs/SCHEDULING.md). A preferred time window alone does not enable it.
 
 ## Give this to your agent
 
@@ -54,6 +54,10 @@ Record the niche and approved automated mode in account settings/schedule. Soft 
 Before the first start, copy `.env.example` to `.env` and change `TOPIC` and `PROFILE_NAME`. Or supply `topic` JSON on each run, which is best for accounts in different niches. Existing saved scripts are preserved on restart, so later `.env` changes do not replace their defaults. Use run inputs or edit the private copy in AliasMode.
 
 The sample niche is GTA 6. Standalone `Vice City` was removed because it returned unrelated businesses. Use a few specific related phrases rather than broad keywords.
+
+## Automated schedule
+
+For 07:00 and 21:00 GMT sessions targeting 20 minutes, with one persisted random skipped day per week, follow [SCHEDULING.md](docs/SCHEDULING.md). macOS has a user-level installer; Linux/container installations use a foreground service. Scheduling is disabled in blank starter settings until configured for a real account.
 
 ## Start, stop and maintain
 
