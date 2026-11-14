@@ -12,9 +12,15 @@ def check():
         assert r.status == 200
     with urllib.request.urlopen('http://127.0.0.1:50400/api/v1/status', timeout=5) as r:
         assert json.load(r)['code'] == 0
-    with urllib.request.urlopen('http://127.0.0.1:50400/api/v1/user/list?page_size=100', timeout=5) as r:
-        profiles = json.load(r)['data']['list']
-    matches = [p for p in profiles if p['name'] == os.getenv('PROFILE_NAME', 'Instagram-Clips-01')]
+    matches = []
+    page = 1
+    while not matches:
+        url = 'http://127.0.0.1:50400/api/v1/user/list?page_size=100&page=%d' % page
+        with urllib.request.urlopen(url, timeout=5) as r:
+            profiles = json.load(r)['data']['list']
+        matches = [p for p in profiles if p['name'] == os.getenv('PROFILE_NAME', 'Instagram-Clips-01')]
+        if len(profiles) < 100: break
+        page += 1
     assert matches, 'Initial profile has not been created'
     query = urllib.parse.urlencode({'user_id':matches[0]['user_id']})
     with urllib.request.urlopen('http://127.0.0.1:50400/api/v1/browser/active?' + query, timeout=5) as r:
