@@ -18,29 +18,26 @@ Open **http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=remote**. The firs
 
 1. Fresh installations are configured in **Local mode** automatically. The startup task creates `Instagram-Clips-01` and opens Instagram. If that task timed out during onboarding, run `docker compose exec desktop python3 tools/bootstrap_profile.py`.
 2. Create your Instagram account or sign in inside that browser. Complete verification yourself.
-3. In AliasMode select the profile → **Run script** → `ig-soft-smoke-test`. Keep parallel browsers at **1** and saved login details **off**. Use `{}` to use your configured topic, or provide:
+3. Give your agent the account label, timezone, intended routine and start date. It creates a private account record directory from the five starter files: `SOP.md`, `progress.md`, `schedule.md`, `warnings.md`, and `settings.json`.
+4. Ask **“Start today's warm-up.”** The agent reads those files, checks warnings, and presents a daily checklist for approval.
+5. Perform the Instagram activities **manually**, then report the actual counts, time spent and any warnings. The agent updates your daily log and progress, and produces weekly reviews.
 
-   ```json
-   {"topic":"GTA 6, GTA VI, Grand Theft Auto VI, Rockstar Games"}
-   ```
-
-4. Wait for the log to show **`done` and actual browsing activity**. A green succeeded badge alone can also mean an early login-check exit.
-5. For a regular session choose `ig-soft-warmup`. `ig-active-warmup` is also preloaded, but select it explicitly only when you intend to allow likes, follows and saves.
-
-Login does **not** automatically start active engagement. No recurring schedule is installed. An agent can handle the setup, short test, and run selection after you sign in; use the prompt below.
+**Manual mode is the default operating policy.** The agent does not independently run browsing/engagement scripts or perform Instagram engagement. Soft, active and smoke scripts remain bundled technical assets; their presence does not authorize execution. No recurring engagement automation is installed.
 
 ## Give this to your agent
 
-> Clone this repo and follow its AGENTS.md. Set up the container, open the desktop, and prepare my Instagram clipping account for [NICHE]. Handle installation and routine recovery yourself. Stop for me to enter Instagram credentials and complete signup/verification. After I am logged in, run the soft smoke test and check the actual completion log. Then run one regular soft session. Do not select active mode unless I ask for it.
+> Clone this repo and follow AGENTS.md and SOP.md. Set up the container and Instagram profile for [NICHE], handling installation and routine recovery. Let me enter credentials and complete verification. Initialize private per-account records, confirm my timezone/start date and proposed routine, then show me a daily checklist for approval. I will perform the activities manually and report the actual results. Do not run the engagement scripts or invent completion records. Save daily progress, reported warnings and weekly reviews in the project files.
 
-The agent should read [AGENTS.md](AGENTS.md) and [the workflow](docs/WORKFLOW.md). For an additional account, create another AliasMode profile; retain the existing profiles and sessions. Do not reuse one profile for multiple Instagram identities.
+This manager is provider independent: Codex, OpenCode, Claude Code or another agent can follow the same Markdown records. If MCP is unavailable, manual user input and local files are sufficient. The agent should read [AGENTS.md](AGENTS.md), [SOP.md](SOP.md) and [the installation workflow](docs/WORKFLOW.md).
+
+For each additional account, create a separate browser profile and private record directory. Host records belong under ignored `accounts/<label>/`; container records belong under `/data/manager/accounts/<label>/`, in the persistent volume. Keep the root starter documents blank, and do not commit private activity records.
 
 ## What is included
 
 | Item | Behavior |
 |---|---|
-| `ig-soft-warmup` | Passive browsing; no likes, follows, saves, posted comments or DMs |
-| `ig-active-warmup` | User-supplied active plan, including likes, follows, occasional saves |
+| `ig-soft-warmup` | Retained passive browsing automation asset; not launched by the manual manager |
+| `ig-active-warmup` | Retained active automation asset with likes/follows/saves; not launched by the manual manager |
 | `ig-soft-smoke-test` | Same fixed engine, 3 planned items and 1 queued profile visit, 5-second feed scroll |
 | `scripts/original/` | Reference copies reconstructed from the supplied scripts; not preloaded |
 | `tools/seed_scripts.py` | Adds missing private script copies without overwriting existing edits |
@@ -51,6 +48,8 @@ The two observed navigation fixes are included in all preloaded scripts: direct 
 These routines automate browsing, not a measurable account 'warmth'. They do not guarantee reach or removal of restrictions. Search results can be unrelated, photo posts can be counted as reels, and actual totals may fall below the plan. There is no cross-run daily cap or account-readiness tracking.
 
 ## Change the niche
+
+Record the actual niche and approved manual routine in the account's schedule/settings. The following script-topic configuration applies only to the retained technical assets; it does not change the manual-only manager policy.
 
 Before the first start, copy `.env.example` to `.env` and change `TOPIC` and `PROFILE_NAME`. Or supply `topic` JSON on each run, which is best for accounts in different niches. Existing saved scripts are preserved on restart, so later `.env` changes do not replace their defaults. Use run inputs or edit the private copy in AliasMode.
 

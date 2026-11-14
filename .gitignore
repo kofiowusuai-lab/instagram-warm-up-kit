@@ -7,3 +7,6 @@ profiles/
 *.sqlite*
 *.log
 .DS_Store
+
+# Private account management records
+accounts/

@@ -6,19 +6,23 @@ Use the README quick start. The container stores AliasMode at `/opt/aliasmode`, 
 
 If AliasMode displays welcome/local-mode onboarding, complete it in the desktop. If the initial-profile task timed out, rerun `docker compose exec desktop python3 tools/bootstrap_profile.py`. It never handles Instagram credentials. Check the actual browser window and navigate to Instagram manually if browser launch arguments are ignored by a future platform release.
 
-## Adding accounts
+## Account management
 
-Create a separate named AliasMode profile, open Instagram there, and let the owner sign in. Keep a simple local record of profile name, niche, last run, and result, without credentials. Select the intended profile only. Use topic input JSON rather than modifying the shared script per account. Test one profile before batch use. Let machine capacity determine concurrency; concurrency does not establish account safety.
+The current default is the manual-only manager defined in AGENTS.md and SOP.md. Create a separate named AliasMode profile and a private record directory for each account. Let the user sign in and complete verification. Copy the five root starter files into the account directory only if absent. Use ignored `accounts/<label>/` on the host or persistent `/data/manager/accounts/<label>/` in the container; choose one authority per account.
 
-## Two preserved fixes
+Confirm timezone, start date and intended schedule. Read all five files before each plan. Show the checklist for approval, wait for manual activity and actual completion results, then update daily logs, progress and reported warnings. Review each seven-day period and save a weekly report. Missing reports are unreported, never assumed zero or skipped. Follow the supplied report formats.
+
+Do not run soft, active or smoke scripts on Instagram accounts as part of this manager. Code tests and container readiness checks can run; they are infrastructure verification and do not establish manual activity or account readiness. Do not infer that older automated test history authorizes new automation.
+
+## Retained automation assets: historical fixes
 
 `openSection` directly navigates to its destination URL rather than relying on a sidebar click that stalled in AliasMode Firefox. Dialog author visits ignore hidden links and navigate to the visible author's profile URL. The regression tests exercise these cases. Both soft and active preloaded scripts share these fixes; originals are reference-only.
 
-## Reading results
+## Historical automation log interpretation
 
 `not logged in` is an early return and may still show a green succeeded badge. Check the selected tab and signed-in Home. A real completed run prints `done` and an actual-count summary. Counts can be below plan; topic results may include photos and unrelated accounts. Search visits add to queued profile visits. The original script's 'actions left over for another day' is a message, not persisted scheduling.
 
-No stories is normal for a new account. A challenge or limit is a stop condition, not a technical retry. An unhandled timeout is a software failure: inspect logs and debug it before another session. Avoid repeated full runs while debugging.
+Historical script logs are not manual completion confirmations. For the current manager, reported restrictions/checkpoints pause recommendations; follow SOP.md and the user's official Instagram recovery instructions. Do not launch a routine to test whether a restriction cleared.
 
 ## Recovery
 
@@ -28,4 +32,4 @@ For native AliasMode, a frozen import dialog was recovered by terminating only t
 
 ## Native fallback
 
-If containers cannot run the x64 browser, install official native AliasMode from https://aliasmode.com/docs/macos/ or https://aliasmode.com/docs/linux/ (Windows: official download page). Pin the documented supported release and verify checksums. Import the three `.mjs` files under `scripts/` into private scripts and create a Firefox profile. All later login/topic/testing steps are the same. This fallback is not fully containerized; state that accurately.
+If containers cannot run the x64 browser, install official native AliasMode from https://aliasmode.com/docs/macos/ or https://aliasmode.com/docs/linux/ (Windows: official download page). Pin the documented supported release and verify checksums. The three `.mjs` files may be kept as private technical assets; create a Firefox profile and follow the same manual login and recordkeeping workflow. Do not launch the scripts as part of this manager. This fallback is not fully containerized; state that accurately.
