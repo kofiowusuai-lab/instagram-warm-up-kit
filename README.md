@@ -70,7 +70,7 @@ Accounts, cookies, settings and saved script edits live in the named Docker volu
 
 Only the desktop port is published, on **127.0.0.1**. The AliasMode API, CDP endpoints and VNC backend remain inside the container. Do not change the published address to `0.0.0.0` or expose it publicly. On a remote server use an SSH tunnel: `ssh -L 6080:127.0.0.1:6080 user@server`.
 
-AliasMode's Linux distribution is **x86_64 only**. Compose requests `linux/amd64`; Apple Silicon/ARM hosts need working x86 emulation and are slower. The image runs as an ordinary user and does not request privileged mode or disable browser sandboxes. If the host blocks required browser facilities, use a supported x64 Linux host or native AliasMode; do not silently bypass sandbox protections.
+AliasMode's Linux distribution is **x86_64 only**. Compose requests `linux/amd64`; Apple Silicon/ARM container execution is not supported by this tested release: the sidecar failed under local ARM emulation. Use native AliasMode there, or run this container on an x64 host. The image runs as an ordinary user and does not request privileged mode or disable browser sandboxes. If the host blocks required browser facilities, use a supported x64 Linux host or native AliasMode; do not silently bypass sandbox protections.
 
 Updates preserve private scripts by design. See [UPGRADING.md](docs/UPGRADING.md) for intentional source updates and verification.
 
