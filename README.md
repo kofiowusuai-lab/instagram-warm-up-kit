@@ -19,14 +19,14 @@ Open **http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=remote**. The firs
 1. Fresh installations are configured in **Local mode** automatically. The startup task creates `Instagram-Clips-01` and opens Instagram. If that task timed out during onboarding, run `docker compose exec desktop python3 tools/bootstrap_profile.py`.
 2. Create your Instagram account or sign in inside that browser. Complete verification yourself.
 3. Give your agent the account label, timezone, intended routine and start date. It creates a private account record directory from the five starter files: `SOP.md`, `progress.md`, `schedule.md`, `warnings.md`, and `settings.json`.
-4. Ask **“Start today's warm-up.”** The agent reads those files, checks warnings, and presents a daily checklist for approval.
-5. Perform the Instagram activities **manually**, then report the actual counts, time spent and any warnings. The agent updates your daily log and progress, and produces weekly reviews.
+4. Ask **“Start today's warm-up.”** The agent reads those files, checks warnings, and runs the authorized script mode, recording actual output.
+5. The agent saves the execution log, reports actual counts/outcome, updates progress and warnings, and produces weekly reviews. Report any additional manual activity separately.
 
-**Manual mode is the default operating policy.** The agent does not independently run browsing/engagement scripts or perform Instagram engagement. Soft, active and smoke scripts remain bundled technical assets; their presence does not authorize execution. No recurring engagement automation is installed.
+**Automated activity is the default workflow.** Soft mode is the tested passive default. Active mode performs likes/follows/saves and requires explicit mode selection or a recorded approved schedule. No recurring scheduler is installed by this repository; a preferred time window alone does not enable one.
 
 ## Give this to your agent
 
-> Clone this repo and follow AGENTS.md and SOP.md. Set up the container and Instagram profile for [NICHE], handling installation and routine recovery. Let me enter credentials and complete verification. Initialize private per-account records, confirm my timezone/start date and proposed routine, then show me a daily checklist for approval. I will perform the activities manually and report the actual results. Do not run the engagement scripts or invent completion records. Save daily progress, reported warnings and weekly reviews in the project files.
+> Clone this repo and follow AGENTS.md and SOP.md. Set up the container and profile for [NICHE], handle installation and routine recovery, and let me sign in and complete verification. Initialize private per-account records, then run the approved soft mode and record actual execution results. Keep warnings and weekly reports. Do not switch to active mode or claim a recurring schedule exists without the corresponding recorded configuration.
 
 This manager is provider independent: Codex, OpenCode, Claude Code or another agent can follow the same Markdown records. If MCP is unavailable, manual user input and local files are sufficient. The agent should read [AGENTS.md](AGENTS.md), [SOP.md](SOP.md) and [the installation workflow](docs/WORKFLOW.md).
 
@@ -36,8 +36,8 @@ For each additional account, create a separate browser profile and private recor
 
 | Item | Behavior |
 |---|---|
-| `ig-soft-warmup` | Retained passive browsing automation asset; not launched by the manual manager |
-| `ig-active-warmup` | Retained active automation asset with likes/follows/saves; not launched by the manual manager |
+| `ig-soft-warmup` | Passive automated activity; plans zero likes/follows/saves |
+| `ig-active-warmup` | Active automated activity with likes/follows/saves; explicitly selected mode |
 | `ig-soft-smoke-test` | Same fixed engine, 3 planned items and 1 queued profile visit, 5-second feed scroll |
 | `scripts/original/` | Reference copies reconstructed from the supplied scripts; not preloaded |
 | `tools/seed_scripts.py` | Adds missing private script copies without overwriting existing edits |
@@ -49,7 +49,7 @@ These routines automate browsing, not a measurable account 'warmth'. They do not
 
 ## Change the niche
 
-Record the actual niche and approved manual routine in the account's schedule/settings. The following script-topic configuration applies only to the retained technical assets; it does not change the manual-only manager policy.
+Record the niche and approved automated mode in account settings/schedule. Soft has zero saves; active plans a save on 30% of runs. Neither starts saving on Day 4 or automatically switches mode.
 
 Before the first start, copy `.env.example` to `.env` and change `TOPIC` and `PROFILE_NAME`. Or supply `topic` JSON on each run, which is best for accounts in different niches. Existing saved scripts are preserved on restart, so later `.env` changes do not replace their defaults. Use run inputs or edit the private copy in AliasMode.
 

@@ -3,11 +3,14 @@
   "account_label": null,
   "timezone": null,
   "warmup_start_date": null,
-  "workflow_mode": "manual",
+  "workflow_mode": "automated",
   "schedule_approved": false,
   "schedule_approved_at": null,
   "account_status": "awaiting_setup",
   "records_authority": "local_project_files",
-  "agent_engagement_enabled": false,
-  "weekly_review_period_days": 7
+  "agent_engagement_enabled": true,
+  "weekly_review_period_days": 7,
+  "default_script": "ig-soft-warmup",
+  "active_mode_enabled": false,
+  "scheduler_enabled": false
 }

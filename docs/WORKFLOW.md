@@ -8,11 +8,11 @@ If AliasMode displays welcome/local-mode onboarding, complete it in the desktop.
 
 ## Account management
 
-The current default is the manual-only manager defined in AGENTS.md and SOP.md. Create a separate named AliasMode profile and a private record directory for each account. Let the user sign in and complete verification. Copy the five root starter files into the account directory only if absent. Use ignored `accounts/<label>/` on the host or persistent `/data/manager/accounts/<label>/` in the container; choose one authority per account.
+The current default is automated activity with evidence-based records, defined in AGENTS.md and SOP.md. Create a separate named AliasMode profile and a private record directory for each account. Let the user sign in and complete verification. Copy the five root starter files into the account directory only if absent. Use ignored `accounts/<label>/` on the host or persistent `/data/manager/accounts/<label>/` in the container; choose one authority per account.
 
-Confirm timezone, start date and intended schedule. Read all five files before each plan. Show the checklist for approval, wait for manual activity and actual completion results, then update daily logs, progress and reported warnings. Review each seven-day period and save a weekly report. Missing reports are unreported, never assumed zero or skipped. Follow the supplied report formats.
+Confirm timezone, start date and intended schedule. Read all five files before each plan. Execute within the approved script mode and schedule, then update logs, progress and warnings from observed run results. Obtain user reports only for activity outside the observed run. Review each seven-day period and save a weekly report. Missing reports are unreported, never assumed zero or skipped. Follow the supplied report formats.
 
-Do not run soft, active or smoke scripts on Instagram accounts as part of this manager. Code tests and container readiness checks can run; they are infrastructure verification and do not establish manual activity or account readiness. Do not infer that older automated test history authorizes new automation.
+Run only the authorized script mode on the intended account. Default to tested soft mode; do not silently advance to active. Code tests and container readiness checks can run; they are infrastructure verification and do not establish manual activity or account readiness. Do not infer that older automated test history authorizes new automation.
 
 ## Retained automation assets: historical fixes
 
@@ -22,7 +22,7 @@ Do not run soft, active or smoke scripts on Instagram accounts as part of this m
 
 `not logged in` is an early return and may still show a green succeeded badge. Check the selected tab and signed-in Home. A real completed run prints `done` and an actual-count summary. Counts can be below plan; topic results may include photos and unrelated accounts. Search visits add to queued profile visits. The original script's 'actions left over for another day' is a message, not persisted scheduling.
 
-Historical script logs are not manual completion confirmations. For the current manager, reported restrictions/checkpoints pause recommendations; follow SOP.md and the user's official Instagram recovery instructions. Do not launch a routine to test whether a restriction cleared.
+Script logs must be labeled as automation evidence, not manual completion confirmations. Reported restrictions/checkpoints pause runs; follow SOP.md and the user's official Instagram recovery instructions. Do not launch a routine to test whether a restriction cleared.
 
 ## Recovery
 
@@ -32,4 +32,4 @@ For native AliasMode, a frozen import dialog was recovered by terminating only t
 
 ## Native fallback
 
-If containers cannot run the x64 browser, install official native AliasMode from https://aliasmode.com/docs/macos/ or https://aliasmode.com/docs/linux/ (Windows: official download page). Pin the documented supported release and verify checksums. The three `.mjs` files may be kept as private technical assets; create a Firefox profile and follow the same manual login and recordkeeping workflow. Do not launch the scripts as part of this manager. This fallback is not fully containerized; state that accurately.
+If containers cannot run the x64 browser, install official native AliasMode from https://aliasmode.com/docs/macos/ or https://aliasmode.com/docs/linux/ (Windows: official download page). Pin the documented supported release and verify checksums. The three `.mjs` files may be kept as private technical assets; create a Firefox profile and follow the same login and evidence-based automated workflow. This fallback is not fully containerized; state that accurately.

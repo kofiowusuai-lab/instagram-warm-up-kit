@@ -1,12 +1,12 @@
 # Instagram Warm-up SOP
 
-This is a manual activity planning and recordkeeping workflow. The agent prepares plans and records confirmations; the user performs Instagram activities. Bundled automation scripts are retained as reference/optional technical assets and are not executed by this manager.
+This workflow automates approved Instagram scripts and records observed results. The user handles login and verification; the agent handles authorized runs and routine recovery. Soft mode is the default. Active mode performs real likes/follows/saves and must be explicitly selected or included in an approved schedule. This policy replaces manual-only operation.
 
 ## Initialize one account
 
 Create a private directory using an account label such as `accounts/gta6-clips-01/`. In a container use `/data/manager/accounts/gta6-clips-01/` so records persist in the existing named volume. Do not put credentials or session data in records.
 
-Copy the repository's `SOP.md`, `progress.md`, `schedule.md`, `warnings.md` and `settings.json` there only if absent; create `daily-logs/` and `weekly-reports/`. Do not overwrite an existing account's files. The selected directory's five files become its source of truth. Record its account label, timezone and agreed start date in settings only after confirmation. Do not populate historical activity from assumptions or convert automated test logs into manual completion records.
+Copy the repository's `SOP.md`, `progress.md`, `schedule.md`, `warnings.md` and `settings.json` there only if absent; create `daily-logs/` and `weekly-reports/`. Do not overwrite an existing account's files. The selected directory's five files become its source of truth. Record its account label, timezone and agreed start date in settings only after confirmation. Do not populate historical activity from assumptions or mislabel automated logs as manual activity.
 
 For a host installation, for example:
 
@@ -21,13 +21,13 @@ An agent operating inside the container can access root starters at `/opt/kit/` 
 
 Read all five account files. Require confirmed timezone/start date and an approved schedule before describing a plan as scheduled. Day 1 is the confirmed start date; warm-up day is calendar days since that date plus one in the chosen timezone. Week is `floor((day - 1) / 7) + 1`. For a future start date, status is not started. Pauses and skipped days do not silently reset or advance the calendar; any change in start date/schedule requires explicit agreement and a recorded reason.
 
-The repository does not prescribe evidence-free action quotas or escalation targets. Ask for the user's intended routine and constraints, draft schedule.md, and obtain approval. Keep planned and completed values separate. Reuse today's log if one exists to avoid duplicate plans or double counting. Show the checklist and wait for approval, then wait for the user to perform it manually.
+The repository does not prescribe evidence-free action quotas or escalation targets. Ask for the user's intended routine and constraints, draft schedule.md, and obtain approval. Keep planned and completed values separate. Reuse today's log if one exists to avoid duplicate plans or double counting. Execute within the approved script/schedule scope without repeatedly asking for routine approval. A preferred window alone does not install a scheduler. Preserve a per-account run log and avoid duplicate runs on retries.
 
 ## Record completion
 
-Ask for actual counts for every tracked activity, minutes spent, completion/partial/skip status and any warnings. If the user gives only partial results, save those confirmed fields and keep all other fields unreported. Confirm ambiguous totals rather than guessing. An absence of a warning report is unknown; 'none reported' requires the user to say so.
+Read the actual script output and capture activity counts, elapsed time, completion/partial/failure status and warnings. Label counters as script-reported where the underlying action was not independently verified. Ask the user for manual activity outside those logs. If results are partial, preserve the observed fields and keep all other fields unreported. Confirm ambiguous totals rather than guessing. An absence of a warning report is unknown; 'none reported' requires the user to say so.
 
-Save `daily-logs/YYYY-MM-DD.md` using docs/DAILY-LOG-TEMPLATE.md. Record the confirmation source as a dated user report, not a credential or private message transcript. Update progress.md totals from the daily logs; do not add totals cumulatively a second time when revising the same day. Retain correction history when the user amends a report.
+Save `daily-logs/YYYY-MM-DD.md` using docs/DAILY-LOG-TEMPLATE.md. Record the evidence source as a dated execution log or user report, not a credential or private message transcript. Update progress.md totals from the daily logs; do not add totals cumulatively a second time when revising the same day. Retain correction history when the user amends a report.
 
 ## Warnings and pauses
 
@@ -40,3 +40,9 @@ For each seven-calendar-day period anchored to the confirmed start date, save a 
 ## Report and privacy
 
 Use the AGENTS.md daily report format regardless of provider. Store only noncredential account labels and operational records. Keep personal account records outside Git, protect backups, and preserve the existing Docker volume. Conversation context can help clarify a record but does not replace it.
+
+## Script behavior and timing
+
+Soft mode never likes, follows or saves posts. Active mode probabilistically plans one save on 30% of runs; neither script contains a Day 4 saving rule or automatic progression. A missing save can therefore be expected, and planned saves may also fail. Do not claim that saving occurs on a fixed day.
+
+A confirmed execution window defines when a session may start, not its duration. Install and verify any recurring scheduler separately, with account isolation, duplicate-run prevention, retained logs, and stops for challenges/limits. Do not claim overnight/headless operation is configured or validated merely because a visible test passed. Provider-independent records remain authoritative.

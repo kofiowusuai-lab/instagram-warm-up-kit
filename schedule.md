@@ -5,7 +5,7 @@ Account: not configured
 Start date/timezone: not confirmed
 Approved by/date: not recorded
 
-No activity quantities or escalation schedule have been approved. Ask the user for their intended routine, available time, constraints and start date before preparing a scheduled checklist. Do not treat the bundled scripts' random plans as an approved manual schedule.
+No activity quantities or escalation schedule have been approved. Ask the user for their intended routine, available time, constraints and start date before preparing a scheduled checklist. Do not treat the bundled scripts' random plans as an approved automated schedule.
 
 ## Weekly plans
 

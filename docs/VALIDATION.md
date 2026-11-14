@@ -1,6 +1,6 @@
 # Current operating policy
 
-The repository now defaults to the manual-only manager in AGENTS.md and SOP.md. The historical automated tests below describe earlier technical evidence, not manual completion records or authorization to run engagement scripts. CI continues to check infrastructure without Instagram login or engagement.
+The repository now defaults to approved automated runs with evidence-based recordkeeping in AGENTS.md and SOP.md. The historical automated tests below describe earlier technical evidence, not manual completion records or authorization to select active mode. CI continues to check infrastructure without Instagram login or engagement.
 
 # Validation status
 
