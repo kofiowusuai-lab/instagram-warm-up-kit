@@ -13,3 +13,12 @@ jobs:
       - run: find scripts -name '*.mjs' -exec node --check {} \;
       - run: docker compose config --quiet
       - run: docker build -t instagram-aliasmode-kit:test .
+      - name: Verify container startup without Instagram credentials
+        run: |
+          docker run -d --name aliasmode-kit-check --shm-size=2g instagram-aliasmode-kit:test
+          docker exec aliasmode-kit-check python3 tools/check_container.py
+      - name: Startup diagnostics
+        if: failure()
+        run: |
+          docker logs aliasmode-kit-check || true
+          docker exec aliasmode-kit-check cat /tmp/aliasmode-error.log || true
