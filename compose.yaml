@@ -1,0 +1,15 @@
+services:
+  desktop:
+    build: .
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:6080:6080"
+    volumes:
+      - aliasmode-data:/data
+    shm_size: 2gb
+    environment:
+      TOPIC: "${TOPIC:-GTA 6, GTA VI, Grand Theft Auto VI, Rockstar Games}"
+      PROFILE_NAME: "${PROFILE_NAME:-Instagram-Clips-01}"
+    restart: unless-stopped
+volumes:
+  aliasmode-data:
