@@ -34,10 +34,10 @@ class ReadinessTests(unittest.TestCase):
             self.assertEqual(self.mod.classify_native_window(identifier, []), 'blocked')
         self.assertEqual(self.mod.classify_native_window('iphone-mirroring-main', [], complete=False), 'blocked')
 
-    def fake_mirror(self, root, fail=False):
+    def fake_mirror(self, root, fail=False, missing_error=-25205):
         def attr(node, name, _):
             if fail: return -25211, None
-            return (0, node[name]) if name in node else (-25205, None)
+            return (0, node[name]) if name in node else (missing_error, None)
         return SimpleNamespace(running_app=lambda: object(), find_window=lambda **kw: {'x': 0, 'y': 0},
                                _ax_window_element=lambda app, win: root,
                                _AS=SimpleNamespace(AXUIElementCopyAttributeValue=attr))
@@ -68,6 +68,14 @@ class ReadinessTests(unittest.TestCase):
         root = {'AXRole': 'AXWindow', 'AXIdentifier': 'iphone-mirroring-main', 'AXChildren': [
             {'AXRole': 'AXGroup', 'AXSubrole': 'AXHostingView', 'AXChildren': []}]}
         self.assertEqual(self.mod.native_state(self.fake_mirror(root)), 'ready')
+
+    def test_native_no_value_for_optional_toolbar_metadata_is_not_permission_failure(self):
+        root = {'AXRole': 'AXWindow', 'AXIdentifier': 'iphone-mirroring-main', 'AXChildren': [
+            {'AXRole': 'AXGroup', 'AXSubrole': 'AXHostingView', 'AXChildren': [
+                {'AXRole': 'AXButton', 'AXSubrole': 'AXCloseButton'},
+                {'AXRole': 'AXButton', 'AXIdentifier': 'app.grid.3x3'},
+                {'AXRole': 'AXButton', 'AXIdentifier': 'iphone.app.switcher'}]}]}
+        self.assertEqual(self.mod.native_state(self.fake_mirror(root, missing_error=-25212)), 'ready')
 
 
 if __name__ == '__main__': unittest.main()

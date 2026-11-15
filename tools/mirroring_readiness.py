@@ -33,7 +33,9 @@ def native_state(mirror):
 
     def attribute(node, name, optional=False):
         error, value = mirror._AS.AXUIElementCopyAttributeValue(node, name, None)
-        if error and not (optional and error == -25205):
+        # AXErrorAttributeUnsupported and AXErrorNoValue mean absent optional
+        # metadata, not denied accessibility. Required attributes stay strict.
+        if error and not (optional and error in (-25205, -25212)):
             raise RuntimeError('Native accessibility tree is unavailable')
         return value
 
