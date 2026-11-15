@@ -2,12 +2,17 @@
 import json
 import os
 import subprocess
+from pathlib import Path
 
 
 PROGRAM = '''
 # task: Run the user's authorized passive Instagram session on their own iPhone.
 # step: Execute one bounded device operation and return structured observations.
 import json
+import sys
+sys.path.insert(0, COMPAT_DIR)
+from mirroring_readiness import install
+install()
 from phone_harness import helpers as h
 request = json.loads(PAYLOAD)
 op = request['op']
@@ -48,6 +53,7 @@ class PhoneHarnessClient:
             raise TimeoutError('Phone session deadline reached')
         payload = json.dumps(json.dumps({'op': op, 'kw': kw}))
         source = PROGRAM.replace('PAYLOAD', payload)
+        source = source.replace('COMPAT_DIR', json.dumps(str(Path(__file__).resolve().parent)))
         env = dict(os.environ, PHONE_HARNESS_PLATFORM='ios', DO_NOT_TRACK='1',
                    PHONE_HARNESS_TELEMETRY='0', PHONE_HARNESS_NO_UPDATE_CHECK='1')
         # Explicit ios bypasses any attached cloud session. Never select or start cloud phones.

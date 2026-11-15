@@ -172,9 +172,11 @@ class PhoneTests(unittest.TestCase):
         helpers.tap = lambda *args: self.fail('Unexpected tap after layout change')
         package.helpers = helpers
         payload = json.dumps(json.dumps({'op': 'anchor', 'kw': {'name': 'reels', 'calibration': config()['phone']['calibration']}}))
+        source = mod.PROGRAM.replace('PAYLOAD', payload).replace('COMPAT_DIR', repr(str(Path(__file__).parents[1] / 'tools')))
         with patch.dict(sys.modules, {'phone_harness': package, 'phone_harness.helpers': helpers}):
-            with self.assertRaisesRegex(RuntimeError, 'layout changed'):
-                exec(compile(mod.PROGRAM.replace('PAYLOAD', payload), '<bridge>', 'exec'), {})
+            with patch('mirroring_readiness.install', return_value=True):
+                with self.assertRaisesRegex(RuntimeError, 'layout changed'):
+                    exec(compile(source, '<bridge>', 'exec'), {})
 
     def test_mid_dwell_pause_stops_before_next_input(self):
         def sleep(seconds):
