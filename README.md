@@ -1,4 +1,12 @@
-# Instagram AliasMode Kit
+# Instagram Warm-up Kit
+
+Manage Instagram sessions either on **your own iPhone's Instagram app** through [Phone Harness](https://github.com/phone-harness/phone-harness), or through the existing AliasMode browser backend. Keep the same private account records, warnings and UTC schedule.
+
+**Phone setup:** follow [PHONE.md](docs/PHONE.md). The local iPhone backend uses macOS iPhone Mirroring, verifies the expected own-profile username and supports bounded passive Reels sessions with topic-based dwell. It needs no Xcode or cloud account. Active phone engagement and automatic account switching are unsupported. Existing browser accounts are unchanged until explicitly configured for phone control. Do not migrate a restricted account to work around its checkpoint.
+
+The automated phone tests use simulated observations. Pairing, icon calibration, a live attended session and background scheduling must be verified on the actual device before enabling recurring sessions. Passing tests or installing Phone Harness is not evidence of account activity.
+
+## AliasMode browser setup
 
 A portable AliasMode desktop with **soft and active Instagram scripts preloaded**, persistent browser profiles, and instructions an AI agent can follow.
 

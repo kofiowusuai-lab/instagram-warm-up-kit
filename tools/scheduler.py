@@ -125,6 +125,22 @@ def execute(config,account,key,state,client):
     with (account/'progress.md').open('a') as f:
         f.write('\n## Automated scheduled session '+key+' GMT\n\nOutcome: '+status+'. Evidence: '+record['log']+'. Reported counts: '+json.dumps(record['reported_counts'])+'. Interrupted actions without counters remain unreported.\n')
 
+def execute_backend(config,account,key,state):
+    backend=config.get('execution_backend','aliasmode')
+    if backend=='phone-harness':
+        from phone_warmup import run_session
+        result=run_session(account)
+        state['runs'][key].update(result,backend=backend)
+    elif backend=='aliasmode':
+        from aliasmode_scripts import AliasModeScripts
+        helper=config.get('aliasmode_helper')
+        if helper:
+            import subprocess
+            subprocess.run([helper,'profiles','list'],check=True,timeout=180,
+                stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        execute(config,account,key,state,AliasModeScripts())
+    else:raise ValueError('Unknown execution backend; refusing to fall back to another device')
+
 def tick(account,check=False):
     account=Path(account).resolve()
     with (account/'.scheduler.lock').open('a') as lock:
@@ -134,6 +150,11 @@ def tick(account,check=False):
         for name in ('SOP.md','progress.md','schedule.md','warnings.md'):
             (account/name).read_text()
         if check:
+            backend=config.get('execution_backend','aliasmode')
+            if backend=='phone-harness':
+                from phone_warmup import check_account
+                return check_account(account)
+            if backend!='aliasmode':raise ValueError('Unknown execution backend')
             from aliasmode_scripts import AliasModeScripts
             client=AliasModeScripts();current=client.status()
             return {'status':'ready','schedule':config.get('schedule'),'another_script_running':bool(current and current['status']!='finished')}
@@ -143,14 +164,7 @@ def tick(account,check=False):
         write_json(state_path,state)
         if not key:return {'status':'no_due_session'}
         try:
-            from aliasmode_scripts import AliasModeScripts
-            # The official helper starts the desktop in the background if it is closed.
-            helper=config.get('aliasmode_helper')
-            if helper:
-                import subprocess
-                subprocess.run([helper,'profiles','list'],check=True,timeout=180,
-                    stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-            execute(config,account,key,state,AliasModeScripts())
+            execute_backend(config,account,key,state)
         except Exception as error:
             fresh=json.loads((account/'settings.json').read_text())
             status='paused_warning' if fresh.get('account_status')=='paused_restriction' else 'failed'

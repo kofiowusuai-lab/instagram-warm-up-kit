@@ -1,5 +1,9 @@
 # Operating workflow
 
+## Native phone workflow
+
+For Instagram in the real iPhone app, use [PHONE.md](PHONE.md) instead of the browser installation below. Phone Harness runs on the host Mac, not inside the x64 AliasMode container. Keep existing per-account records authoritative. Setup does not authorize engagement, clear warnings, migrate sessions or install a new schedule. The account's explicit `execution_backend` selects the runner; missing means AliasMode for compatibility.
+
 ## First installation
 
 Use the README quick start. The container stores AliasMode at `/opt/aliasmode`, the kit at `/opt/kit`, and account state under `/data`. Scripts are seeded before AliasMode starts into `/data/com.aliasmode.desktop/custom-scripts/local.json`. Existing copies are never overwritten. Fresh installations also receive a Local-mode config before app startup; existing configs are preserved. Bootstrap uses only the documented loopback status/profile/browser routes; it explicitly creates Firefox rather than the API's Chromium default. It reuses a matching profile name and handles list pagination.
