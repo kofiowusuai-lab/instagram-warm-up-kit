@@ -35,3 +35,7 @@ The owner account's native macOS minute-tick LaunchAgent was installed and its i
 # Phone backend validation — 2026-11-15
 
 Phone Harness 0.3.3 was installed on macOS 26.5. Its doctor reported the Python frameworks, Accessibility and Screen Recording available; iPhone Mirroring was not yet running/paired. No live Instagram phone activity or account switch was performed. Backend tests simulate UI observations and time. Pairing, screenshot-based navigation calibration, an attended passive session and LaunchAgent phone execution remain unverified until actual evidence is recorded. Existing Instagram warnings must remain paused.
+
+## Readiness compatibility follow-up — 2026-11-15
+
+A live mirrored iPhone reproduced an upstream 0.3.3 false disconnected result containing only `Home Screen` and `App Switcher` native toolbar controls. With the toolbar hidden, the observed native tree is `iphone-mirroring-main` → `AXGroup`/`AXHostingView` with no accessible phone content. The version-pinned compatibility preserves structural action guards while accepting those observed live shapes. A real read-only `ensure_device()` subsequently returned ready with window bounds. Normal CLI registration preserves the existing helper file with a private backup. This verifies connection detection, not the full Instagram warm-up or scheduled execution. Regression tests cover toolbar visibility, hidden hosting view, empty/chrome-only windows, prompts, unknown controls, accessibility failures and registration idempotency.

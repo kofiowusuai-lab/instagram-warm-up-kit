@@ -78,6 +78,29 @@ python3 tools/phone_warmup.py --account accounts/YOUR-LABEL
 
 The preflight expects the user to have left the own-profile screen open; it does not navigate arbitrary screens to find it. Choose a short approved session budget initially. Inspect the actual result and private evidence JSON. A configuration check passing does not establish pairing or live success. Tests use synthetic OCR observations and fake time; no live Instagram run is implied by their success.
 
+### Phone Harness 0.3.3 readiness compatibility
+
+On the tested Mac, a live iPhone Mirroring window exposes native toolbar controls (`app.grid.3x3` and `iphone.app.switcher`). Upstream 0.3.3 can classify these as a disconnected screen. The kit loads `tools/mirroring_readiness.py` before every phone operation. It inspects the matched main window, accepts the observed stream hosting view or identified live toolbar, ignores only those two toolbar buttons and standard window chrome, and keeps native text, prompts, unknown controls, incomplete trees and accessibility failures blocked. Existing before/after-input guards stay active. Ordinary empty/chrome-only windows without the observed hosting view or live toolbar are not ready. This is a native structural check, not proof of video playback.
+
+To apply the same compatibility to normal `phone-harness` script commands, register it in your **existing** agent workspace:
+
+```bash
+python3 tools/install_phone_compat.py --workspace ~/.phone-harness/agent-workspace
+```
+
+Use the actual workspace path if your install uses a different one (see Phone Harness's `PH_AGENT_WORKSPACE` and XDG rules). Registration preserves existing helpers, creates a private `.bak` rollback copy and refuses conflicting registrations. Keep this repository at its registered absolute path. The loader affects script commands; the upstream `phone-harness doctor ios` subcommand does not load agent helpers. A compatibility-aware diagnostic can run inside a script instead:
+
+```bash
+PHONE_HARNESS_PLATFORM=ios DO_NOT_TRACK=1 phone-harness <<'PY'
+# task: Verify the local iPhone connection.
+# step: Run diagnostics with the registered native-window compatibility.
+from phone_harness.admin import run_doctor
+raise SystemExit(run_doctor('ios'))
+PY
+```
+
+This fix is pinned to Phone Harness **0.3.3** and refuses unvalidated versions. To undo the CLI registration, restore the installer-reported private backup to `agent_helpers.py`. Repository rollback also restores the prior bridge. Do not upgrade Phone Harness until the compatibility is revalidated, or restore the helper backup before upgrading.
+
 ## Scheduling and multiple accounts
 
 The existing UTC scheduler dispatches the phone backend only when `execution_backend` is explicitly `phone-harness`. A missing backend preserves legacy AliasMode behavior; an unknown value is an error. The existing persisted skipped days and duplicate slot claims remain intact. After an attended successful phone test, record live validation and user schedule authorization before setting `scheduler_enabled` true and installing the service:
