@@ -4,6 +4,7 @@
   "timezone": null,
   "warmup_start_date": null,
   "workflow_mode": "automated",
+  "execution_backend": "aliasmode",
   "schedule_approved": false,
   "schedule_approved_at": null,
   "account_status": "awaiting_setup",
@@ -13,6 +14,16 @@
   "default_script": "ig-soft-warmup",
   "active_mode_enabled": false,
   "scheduler_enabled": false,
+  "phone": {
+    "enabled": false,
+    "platform": "ios",
+    "mode": "soft",
+    "expected_username": null,
+    "harness_executable": null,
+    "calibration": null,
+    "dwell_seconds": 15,
+    "max_items": 60
+  },
   "schedule": {
     "timezone": "UTC",
     "times": [

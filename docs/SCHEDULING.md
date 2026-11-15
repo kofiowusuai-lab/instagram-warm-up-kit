@@ -1,5 +1,7 @@
 # Fixed-GMT automated soft sessions
 
+For `execution_backend: phone-harness`, the scheduler dispatches the native iPhone runner instead of AliasMode. Follow [PHONE.md](PHONE.md) for configuration, own-profile preparation, shared-phone contention and live-validation requirements. A missing backend keeps the browser behavior described below. Stop/unload an older scheduler before changing existing account backend settings; old versions do not dispatch phone sessions. Automatic account switching and unattended multi-account rotation are unsupported. The read-only phone `--check` validates configuration only; it does not establish device readiness.
+
 The scheduler operates without an LLM. It runs only the dedicated `ig-soft-timed-v1` passive script: no likes, follows, saves, comments or DMs. It uses the fixed navigation engine with a cooperative duration budget; an independent timer inside the script closes only its dedicated session tab at the limit. The scheduler never calls AliasMode's global Stop endpoint. Startup delays, failed login, restrictions or tool failures can shorten a session. Browser cleanup can take additional seconds. No claim is made that every minute is content playback.
 
 ## Account settings

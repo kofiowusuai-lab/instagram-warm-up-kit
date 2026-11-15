@@ -1,5 +1,7 @@
 # Instagram Warm-up SOP
 
+For native Instagram on the user's iPhone, follow [PHONE.md](docs/PHONE.md). The phone backend uses the same five authoritative account records and warning history. Select it explicitly, verify the own-profile username and owner controls, and complete attended preflight/live validation before enabling recurring sessions. It supports passive Reels browsing only; it does not switch accounts. Preserve unresolved warnings during migration. Observed dwell and screen changes are not verified watched-Reel counts.
+
 This workflow automates approved Instagram scripts and records observed results. The user handles login and verification; the agent handles authorized runs and routine recovery. Soft mode is the default. Active mode performs real likes/follows/saves and must be explicitly selected or included in an approved schedule. This policy replaces manual-only operation.
 
 ## Initialize one account

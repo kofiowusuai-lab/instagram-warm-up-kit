@@ -98,4 +98,6 @@ Keep the repository private unless the owner explicitly requests public visibili
 
 ## Scheduled sessions
 
+For the user's own iPhone, read `docs/PHONE.md`. Select `execution_backend: phone-harness` explicitly per account; absence preserves AliasMode. Phone sessions support passive mode only, require an approved routine and confirmed warning state, and hold one shared device lock. Never guess icon positions, auto-switch accounts, treat a visited public profile as signed-in identity, enable a real schedule before live validation, or route a personal-phone task to cloud. The user prepares the own Profile tab and completes pairing/verification. Retain the same private records when changing backends; unresolved warnings still block. Use `phone_warmup.py --check` for configuration and `--preflight` for profile-only verification. Report screen/dwell observations separately from unverified Reel playback. Tests and source checks must never operate a real phone.
+
 Use docs/SCHEDULING.md for the fixed-GMT scheduler. It is opt-in per account. The user's configured schedule takes precedence over old preferred windows. Keep per-account claims/skip dates and logs persistent. The native macOS job requires a logged-in, awake machine; do not claim headless execution or wake support. Stop at the duration budget and record incomplete counters as unreported.
