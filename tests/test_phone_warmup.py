@@ -90,6 +90,20 @@ class PhoneTests(unittest.TestCase):
         self.assertFalse(self.phone.is_reels_continuation(obs))
         obs['boxes'].append({'text': 'Follow', 'confidence': 1, 'x': 182, 'y': 340})
         self.assertFalse(self.phone.is_reels_continuation(obs))
+
+    def test_reels_transition_waits_for_layout_without_extra_tap(self):
+        original = self.device.call
+        pending = [True]
+        def call(op, timeout, **kw):
+            result = original(op, timeout, **kw)
+            if op == 'observe' and self.device.view == 'reels' and pending[0]:
+                pending[0] = False
+                return {'bounds': result['bounds'], 'boxes': [{'text': 'Loading', 'confidence': 1, 'y': 20}]}
+            return result
+        self.device.call = call
+        result = self.run_session()
+        self.assertEqual(result['status'], 'finished')
+        self.assertEqual(sum(kw.get('name') == 'reels' for op, kw, _ in self.device.calls), 2)
     def run_session(self):
         return self.phone.run_session(self.account, client=self.device,
                                       clock=self.clock.now, sleep=self.clock.sleep,

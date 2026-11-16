@@ -213,6 +213,16 @@ def run_session(account, client=None, clock=time.monotonic, sleep=time.sleep, lo
             guard(); before = clock(); sleep(min(1, end - before))
             result['observations']['dwell_seconds'] += clock() - before
 
+    def await_reels():
+        # Read the transition, never retry its tap. Total work remains bounded
+        # by the session deadline and per-operation timeout.
+        for attempt in range(3):
+            observation = observe()
+            if is_reels_continuation(observation): return observation
+            if attempt < 2:
+                guard(); sleep(min(.5, max(0, deadline - clock())))
+        raise StopSession('ambiguous_screen')
+
     try:
         with device_lock(lock_path):
             call('ensure'); call('open')
@@ -224,13 +234,9 @@ def run_session(account, client=None, clock=time.monotonic, sleep=time.sleep, lo
                     raise StopSession('identity_mismatch')
                 if preflight: raise StopSession('ready')
                 call('anchor', name='reels', calibration=phone['calibration'])
-                feed = observe()
-                if not is_reels(feed):
-                    raise StopSession('ambiguous_screen')
+                feed = await_reels()
                 if previous is not None:
-                    call('scroll'); feed = observe()
-                    if not is_reels_continuation(feed):
-                        raise StopSession('ambiguous_screen')
+                    call('scroll'); feed = await_reels()
                 current = fingerprint(feed)
                 if current == previous: raise StopSession('unchanged_screen')
                 if previous is not None: result['observations']['feed_changes'] += 1
