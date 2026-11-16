@@ -3,12 +3,63 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'tools'))
 
 
 class ReadinessTests(unittest.TestCase):
     def setUp(self): self.mod = importlib.import_module('mirroring_readiness')
+
+    def test_main_window_selected_behind_toolbar_and_localized(self):
+        for name in ['iPhone Mirroring', 'iPhone镜像']:
+            windows = [
+                {'kCGWindowOwnerPID': 42, 'kCGWindowLayer': 0, 'kCGWindowName': 'Window',
+                 'kCGWindowOwnerName': name, 'kCGWindowNumber': 1,
+                 'kCGWindowBounds': {'X': 11, 'Y': 10, 'Width': 66, 'Height': 20}},
+                {'kCGWindowOwnerPID': 42, 'kCGWindowLayer': 0, 'kCGWindowName': name,
+                 'kCGWindowOwnerName': name, 'kCGWindowNumber': 2,
+                 'kCGWindowBounds': {'X': 5, 'Y': 1, 'Width': 348, 'Height': 766}}]
+            self.assertEqual(self.mod.select_main_window(windows, 42),
+                             {'x': 5, 'y': 1, 'w': 348, 'h': 766, 'id': 2})
+
+    def test_main_window_does_not_guess_from_size_or_other_owner(self):
+        overlay = {'kCGWindowOwnerPID': 42, 'kCGWindowLayer': 0,
+                   'kCGWindowName': 'Window', 'kCGWindowOwnerName': 'iPhone Mirroring',
+                   'kCGWindowNumber': 1, 'kCGWindowBounds': {'X': 0, 'Y': 0, 'Width': 348, 'Height': 766}}
+        self.assertIsNone(self.mod.select_main_window([overlay], 42))
+        overlay['kCGWindowName'] = 'iPhone Mirroring'
+        self.assertIsNone(self.mod.select_main_window([overlay], 99))
+        self.assertIsNone(self.mod.select_main_window([overlay, overlay], 42))
+
+    def test_point_must_belong_to_main_window_not_covering_same_app_toolbar(self):
+        main = {'kCGWindowLayer': 0, 'kCGWindowNumber': 2,
+                'kCGWindowBounds': {'X': 0, 'Y': 0, 'Width': 350, 'Height': 760}}
+        toolbar = dict(main, kCGWindowNumber=1)
+        self.assertTrue(self.mod.main_owns_point([main], 2, 100, 100))
+        self.assertFalse(self.mod.main_owns_point([toolbar, main], 2, 100, 100))
+        self.assertFalse(self.mod.main_owns_point([main], 2, 400, 100))
+
+    def test_window_selection_preserves_background_offscreen_default_and_rejects_moved_tap(self):
+        window = {'kCGWindowOwnerPID': 42, 'kCGWindowLayer': 0,
+                  'kCGWindowName': 'iPhone Mirroring', 'kCGWindowOwnerName': 'iPhone Mirroring',
+                  'kCGWindowNumber': 2, 'kCGWindowBounds': {'X': 0, 'Y': 0, 'Width': 350, 'Height': 760}}
+        options = []; taps = []
+        def windows(option, unused):
+            options.append(option); return [window]
+        q = SimpleNamespace(kCGWindowListOptionOnScreenOnly=1, kCGWindowListOptionAll=0,
+                            kCGNullWindowID=0, CGWindowListCopyWindowInfo=windows)
+        def activate(): window['kCGWindowBounds']['X'] = 50
+        mirror = SimpleNamespace(Quartz=q, running_app=lambda: SimpleNamespace(processIdentifier=lambda: 42),
+                                 activate=activate, tap=lambda x, y: taps.append((x, y)))
+        background = SimpleNamespace()
+        with patch.dict(sys.modules, {'phone_harness.background': background}):
+            self.mod.install_window_selection(mirror)
+            background.find_window()
+            self.assertEqual(options[-1], 0)
+            with self.assertRaisesRegex(RuntimeError, 'moved'):
+                mirror.tap(100, 100)
+            self.assertEqual(taps, [])
 
     def test_live_toolbar_buttons_do_not_block_stream(self):
         nodes = [{'role': 'AXButton', 'identifier': 'app.grid.3x3', 'label': 'Home Screen'},

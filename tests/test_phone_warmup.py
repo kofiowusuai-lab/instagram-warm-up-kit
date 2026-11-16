@@ -64,6 +64,32 @@ class PhoneTests(unittest.TestCase):
         self.save(config()); self.clock = Clock(); self.device = Device()
 
     def save(self, c): (self.account / 'settings.json').write_text(json.dumps(c))
+
+    def test_exact_username_with_observed_dropdown_and_notification_marks(self):
+        for suffix in [' v•', ' ⌄', ' ∨ ●']:
+            self.assertTrue(self.phone.profile_matches(
+                {'bounds': {'y': 0, 'h': 400}, 'boxes': profile('fixture_account' + suffix)}, 'fixture_account'))
+        for wrong in ['fixture_account_extra v•', 'fixture_account other', 'fixture_accountv•']:
+            self.assertFalse(self.phone.profile_matches(
+                {'bounds': {'y': 0, 'h': 400}, 'boxes': profile(wrong)}, 'fixture_account'))
+
+    def test_reels_heading_accepts_dropdown_but_not_caption_mentions(self):
+        for text in ['Reels', 'Reels v', 'Reels ⌄']:
+            self.assertTrue(self.phone.is_reels({'bounds': {'y': 0, 'h': 400},
+                'boxes': [{'text': text, 'confidence': .99, 'y': 40}]}))
+        for text, y in [('Reels', 300), ('My Reels v', 40), ('Reels video', 40)]:
+            self.assertFalse(self.phone.is_reels({'bounds': {'y': 0, 'h': 400},
+                'boxes': [{'text': text, 'confidence': .99, 'y': y}]}))
+
+    def test_scrolled_reels_requires_three_right_rail_counters(self):
+        obs = {'bounds': {'x': 0, 'y': 0, 'w': 200, 'h': 400},
+               'boxes': [{'text': t, 'confidence': 1, 'x': 182, 'y': y}
+                         for t, y in [('129K', 220), ('663', 260), ('1,649', 300)]]}
+        self.assertTrue(self.phone.is_reels_continuation(obs))
+        obs['boxes'].pop()
+        self.assertFalse(self.phone.is_reels_continuation(obs))
+        obs['boxes'].append({'text': 'Follow', 'confidence': 1, 'x': 182, 'y': 340})
+        self.assertFalse(self.phone.is_reels_continuation(obs))
     def run_session(self):
         return self.phone.run_session(self.account, client=self.device,
                                       clock=self.clock.now, sleep=self.clock.sleep,
@@ -171,6 +197,8 @@ class PhoneTests(unittest.TestCase):
         helpers.find_window = lambda: {'x': 0, 'y': 0, 'w': 400, 'h': 400}
         helpers.tap = lambda *args: self.fail('Unexpected tap after layout change')
         package.helpers = helpers
+        from types import SimpleNamespace
+        package.mirror = SimpleNamespace(activate=lambda: None)
         payload = json.dumps(json.dumps({'op': 'anchor', 'kw': {'name': 'reels', 'calibration': config()['phone']['calibration']}}))
         source = mod.PROGRAM.replace('PAYLOAD', payload).replace('COMPAT_DIR', repr(str(Path(__file__).parents[1] / 'tools')))
         with patch.dict(sys.modules, {'phone_harness': package, 'phone_harness.helpers': helpers}):
@@ -213,6 +241,7 @@ class BridgeTests(unittest.TestCase):
             args, kw = run.call_args
             self.assertEqual(args[0], ['/path with spaces/phone-harness'])
             self.assertEqual(kw['env']['PHONE_HARNESS_PLATFORM'], 'ios')
+            self.assertEqual(kw['env']['PHONE_HARNESS_BACKGROUND'], '0')
             self.assertEqual(kw['env']['DO_NOT_TRACK'], '1')
             self.assertEqual(kw['timeout'], 3)
             run.return_value.returncode = 1; run.return_value.stderr = 'secret screen contents'

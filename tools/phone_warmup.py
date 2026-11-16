@@ -117,7 +117,10 @@ def profile_matches(observation, username):
     top = [b for b in observation.get('boxes', [])
            if b.get('confidence', 0) >= 0.9
            and bounds.get('y', 0) <= b.get('y', -1) < bounds.get('y', 0) + bounds['h'] * .3]
-    matches = [b for b in top if b.get('text', '').strip().lower().lstrip('@') == username.lower()]
+    # OCR merges the adjacent account dropdown and notification dot into the
+    # title. Accept only observed separated UI marks after the exact handle.
+    title = re.compile(r'@?' + re.escape(username) + r'(?:\s+[v∨⌄▼](?:\s*[•●])?)?', re.I)
+    matches = [b for b in top if title.fullmatch(b.get('text', '').strip())]
     return len(matches) == 1
 
 
@@ -125,10 +128,33 @@ def fingerprint(observation):
     return hashlib.sha256(json.dumps(texts(observation)).encode()).hexdigest()
 
 
+def is_reels(observation):
+    bounds = observation.get('bounds') or {}
+    if not bounds.get('h'): return False
+    return any(b.get('confidence', 0) >= .9
+               and bounds.get('y', 0) <= b.get('y', -1) < bounds.get('y', 0) + bounds['h'] * .3
+               and re.fullmatch(r'Reels(?:\s+[v∨⌄▼])?', b.get('text', '').strip(), re.I)
+               for b in observation.get('boxes', []))
+
+
 def topic_matches(observation, topic):
     visible = ' '.join(texts(observation)).casefold()
     return any(re.search(r'(?<!\w)' + re.escape(phrase.strip().casefold()) + r'(?!\w)', visible)
                for phrase in topic.split(',') if phrase.strip())
+
+
+def is_reels_continuation(observation):
+    if is_reels(observation): return True
+    # Instagram hides the heading after advancing. Only accept this layout
+    # immediately after a verified Reels navigation/scroll, never as identity.
+    bounds = observation.get('bounds') or {}
+    if not bounds.get('w') or not bounds.get('h'): return False
+    counters = [b for b in observation.get('boxes', [])
+                if b.get('confidence', 0) >= .9
+                and bounds.get('x', 0) + bounds['w'] * .84 < b.get('x', -1) < bounds.get('x', 0) + bounds['w']
+                and bounds.get('y', 0) + bounds['h'] * .5 < b.get('y', -1) < bounds.get('y', 0) + bounds['h'] * .9
+                and re.fullmatch(r'\d[\d,.]*(?:[KM])?', b.get('text', '').strip(), re.I)]
+    return len({round((b['y'] - bounds.get('y', 0)) / bounds['h'] * 30) for b in counters}) >= 3
 
 
 def pause_warning(account):
@@ -199,11 +225,11 @@ def run_session(account, client=None, clock=time.monotonic, sleep=time.sleep, lo
                 if preflight: raise StopSession('ready')
                 call('anchor', name='reels', calibration=phone['calibration'])
                 feed = observe()
-                if 'reels' not in {t.lower() for t in texts(feed)}:
+                if not is_reels(feed):
                     raise StopSession('ambiguous_screen')
                 if previous is not None:
                     call('scroll'); feed = observe()
-                    if 'reels' not in {t.lower() for t in texts(feed)}:
+                    if not is_reels_continuation(feed):
                         raise StopSession('ambiguous_screen')
                 current = fingerprint(feed)
                 if current == previous: raise StopSession('unchanged_screen')
@@ -215,7 +241,7 @@ def run_session(account, client=None, clock=time.monotonic, sleep=time.sleep, lo
                 else:
                     result['observations']['topic_misses'] += 1
                 after = observe()  # Catch a warning during dwell before any next input.
-                if 'reels' not in {t.lower() for t in texts(after)}:
+                if not is_reels_continuation(after):
                     raise StopSession('ambiguous_screen')
                 call('anchor', name='profile', calibration=phone['calibration'])
                 if not profile_matches(observe(), phone['expected_username']):

@@ -27,6 +27,8 @@ else:
     elif op == 'observe':
         value = {'bounds': h.find_window(), 'boxes': h.screen()}
     elif op == 'anchor':
+        from phone_harness import mirror
+        mirror.activate()
         bounds = h.find_window()
         calibration = kw['calibration']
         ratio = bounds['w'] / bounds['h']
@@ -54,7 +56,7 @@ class PhoneHarnessClient:
         payload = json.dumps(json.dumps({'op': op, 'kw': kw}))
         source = PROGRAM.replace('PAYLOAD', payload)
         source = source.replace('COMPAT_DIR', json.dumps(str(Path(__file__).resolve().parent)))
-        env = dict(os.environ, PHONE_HARNESS_PLATFORM='ios', DO_NOT_TRACK='1',
+        env = dict(os.environ, PHONE_HARNESS_PLATFORM='ios', PHONE_HARNESS_BACKGROUND='0', DO_NOT_TRACK='1',
                    PHONE_HARNESS_TELEMETRY='0', PHONE_HARNESS_NO_UPDATE_CHECK='1')
         # Explicit ios bypasses any attached cloud session. Never select or start cloud phones.
         try:

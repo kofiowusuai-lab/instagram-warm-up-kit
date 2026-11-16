@@ -80,6 +80,22 @@ The preflight expects the user to have left the own-profile screen open; it does
 
 ### Phone Harness 0.3.3 readiness compatibility
 
+The kit also selects the main window by its localized application/title match,
+rather than the first layer-zero window: macOS may put a 66×20 hover toolbar
+ahead of the phone. Using that toolbar's bounds silently misdirects taps.
+The scheduled bridge forces foreground input (`PHONE_HARNESS_BACKGROUND=0`),
+activates before calculating calibrated points, and refuses taps when the main
+window moved or another window covers the target. Target checks use the main
+window ID, including when a covering window belongs to the same app.
+The Mac's foreground window and pointer may change while a session runs.
+
+OCR may merge the account/Reels dropdown arrow into its heading. The runner
+accepts narrowly defined separated dropdown marks after the exact handle,
+while still requiring owner controls. After a verified Reels navigation, three
+distinct high-confidence numeric counters in the right rail can identify the
+scrolled layout where Instagram hides the Reels heading. These checks are
+layout-specific; an unsupported layout stops the run.
+
 On the tested Mac, a live iPhone Mirroring window exposes native toolbar controls (`app.grid.3x3` and `iphone.app.switcher`). Upstream 0.3.3 can classify these as a disconnected screen. The kit loads `tools/mirroring_readiness.py` before every phone operation. It inspects the matched main window, accepts the observed stream hosting view or identified live toolbar, ignores only those two toolbar buttons and standard window chrome, and keeps native text, prompts, unknown controls, incomplete trees and accessibility failures blocked. Existing before/after-input guards stay active. Ordinary empty/chrome-only windows without the observed hosting view or live toolbar are not ready. This is a native structural check, not proof of video playback.
 
 To apply the same compatibility to normal `phone-harness` script commands, register it in your **existing** agent workspace:
